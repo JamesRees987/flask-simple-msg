@@ -1,0 +1,61 @@
+/* Custom site styles */
+
+/* Make client alert fit the card and feel integrated */
+#clientAlertContainer {
+  margin-bottom: 1rem;
+}
+
+#clientAlertContainer .alert {
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  border-left-width: 0.5rem;
+}
+
+/* Accent the left border using the bootstrap color variables */
+#clientAlertContainer .alert-danger {
+  background-color: rgba(220, 53, 69, 0.06);
+  border-left-color: var(--bs-danger);
+  color: #86181d;
+}
+
+#clientAlertContainer .alert-warning {
+  background-color: rgba(255, 193, 7, 0.06);
+  border-left-color: var(--bs-warning);
+  color: #6b4a00;
+}
+
+#clientAlertContainer .alert-success {
+  background-color: rgba(25, 135, 84, 0.06);
+  border-left-color: var(--bs-success);
+  color: #0f5132;
+}
+
+/* Ensure close button is visually subtle */
+#clientAlertContainer .btn-close {
+  opacity: 0.7;
+}
+
+@media (max-width: 576px) {
+  #clientAlertContainer .alert {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.9rem;
+  }
+}
+
+/* Navbar logo (compact) */
+.navbar-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+@media (max-width: 576px) {
+  .navbar-logo {
+    width: 26px;
+    height: 26px;
+  }
+}

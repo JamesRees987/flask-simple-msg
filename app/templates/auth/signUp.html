@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block title %}Sign Up - Simple Message App{%
+endblock %} {% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-lg">
+      <div class="card-body p-5">
+        <h2 class="card-title text-center mb-4">Create an Account</h2>
+
+        {% if error %}
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {{ error }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endif %} {% with messages =
+        get_flashed_messages(with_categories=true) %} {% if messages %} {% for
+        category, message in messages %}
+        <div
+          class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show"
+          role="alert"
+        >
+          {{ message|safe }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <div id="clientAlertContainer"></div>
+
+        <form method="POST" action="{{ url_for('auth.signUp') }}" novalidate>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-control form-control-lg"
+              required
+              placeholder="Choose a username"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control form-control-lg"
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">
+              Password
+              <i
+                class="bi bi-info-circle"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Strong password requires: 8+ characters, uppercase & lowercase letters, numbers, and special characters"
+              ></i>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control form-control-lg"
+              required
+              placeholder="Create a password"
+            />
+            <div class="mt-2" id="strengthContainer" style="display: none">
+              <div class="progress mb-2">
+                <div
+                  id="strengthBar"
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+              <small class="text-muted"
+                >Password strength: <span id="strengthText"></span
+              ></small>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="confirm-password" class="form-label"
+              >Confirm Password</label
+            >
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirm_password"
+              class="form-control form-control-lg"
+              required
+              placeholder="Confirm your password"
+            />
+            <div class="mt-2">
+              <small
+                id="matchFeedback"
+                class="form-text text-danger"
+                style="display: none"
+                >Passwords do not match</small
+              >
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+            Sign Up
+          </button>
+        </form>
+
+        <div class="text-center">
+          <p class="mb-0">
+            Already have an account?
+            <a href="{{ url_for('auth.signIn') }}" class="fw-bold"
+              >Sign in here</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/passwordStrength.js') }}"></script>
+<script src="{{ url_for('static', filename='js/signUpValidation.js') }}"></script>
+<script>
+  // Initialize Bootstrap tooltips
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+</script>
+{% endblock %}

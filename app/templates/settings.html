@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %}Settings - Simple Message App{%
+endblock %} {% block content %}
+<h1>Settings Page</h1>
+<p class="lead">Setup your preferences here.</p>
+
+<h2>Profile Picture</h2>
+<div class="row">
+  <div class="col-md-6">
+    <img
+      src="{{ url_for('route.profile_image') }}"
+      alt="Profile Image"
+      class="mb-3"
+      style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover"
+    />
+
+    <form
+      action="{{ url_for('route.upload_profile_image') }}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label for="profileImage" class="form-label"
+          >Upload New Profile Picture</label
+        >
+        <input
+          type="file"
+          class="form-control"
+          id="profileImage"
+          name="profile_image"
+          accept="image/jpeg,image/jpg"
+          required
+        />
+        <div class="form-text">
+          <i class="bi bi-info-circle"></i> Only JPEG images are accepted.
+          Maximum file size: 5MB.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-upload"></i> Upload Picture
+      </button>
+    </form>
+  </div>
+</div>
+
+<h2 class="mt-5">Other Settings</h2>
+<p>Additional settings coming soon...</p>
+{% endblock %}
