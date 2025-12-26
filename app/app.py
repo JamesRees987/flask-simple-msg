@@ -2,8 +2,9 @@ from flask import Flask
 from routes.routes import route
 from routes.auth import auth
 from os import getenv
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager
 from model.models import User
+from flask_socketio import SocketIO
 
 import sys
 sys.dont_write_bytecode = True
@@ -43,6 +44,9 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'  # Redirect to login page if not authenticated
 login_manager.login_message = 'Please log in to access this page.'
 
+# SocketIO setup
+socketio = SocketIO(app)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -53,4 +57,4 @@ if __name__ == "__main__":
         logging.info("Creating database tables if not exist...")
         db.create_all()
         logging.info("Database tables created or already exist.")
-    app.run(debug=True)
+    socketio.run(app)
