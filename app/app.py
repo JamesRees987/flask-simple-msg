@@ -1,6 +1,7 @@
 from flask import Flask
 from routes.routes import route
 from routes.auth import auth
+from routes.chats import chat
 from os import getenv
 from flask_login import LoginManager
 from model.models import User
@@ -25,6 +26,7 @@ app = Flask(__name__)
 # Register blueprints
 app.register_blueprint(route)
 app.register_blueprint(auth)
+app.register_blueprint(chat)
 
 # Expose credentials on app config for other modules if needed
 app.config["DB_CREDENTIALS"] = dbCreds
@@ -41,7 +43,7 @@ db.init_app(app)
 # Login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'  # Redirect to login page if not authenticated
+login_manager.login_view = 'auth.signIn'  # Redirect to login page if not authenticated
 login_manager.login_message = 'Please log in to access this page.'
 
 # SocketIO setup
@@ -57,4 +59,4 @@ if __name__ == "__main__":
         logging.info("Creating database tables if not exist...")
         db.create_all()
         logging.info("Database tables created or already exist.")
-    socketio.run(app)
+    socketio.run(app, debug=True)
