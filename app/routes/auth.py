@@ -24,7 +24,7 @@ def signUp():
                 flash("Email already registered.", "error")
                 return redirect(url_for("auth.signUp"))
             else:
-                with open("static\img\default-profile.jpg", "rb") as f:
+                with open("app\static\img\default-profile.jpg", "rb") as f:
                     imgByte = f.read()
 
                 user = UserCreds(username=username, password_hash=password, email=email, profile_image=imgByte)

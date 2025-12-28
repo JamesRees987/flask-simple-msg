@@ -1,4 +1,78 @@
 {% extends "base.html" %} {% block title %}My Chats - Simple Message App{%
 endblock %} {% block content %}
-<h1>My Chats</h1>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Start a New Chat</h3>
+          <p class="text-muted">Search for a user to start chatting</p>
+
+          <!-- Search Form -->
+          <!-- BACKEND: This form submits to a route that searches users in database -->
+          <form method="POST" action="{{ url_for('chat.searchUser') }}">
+            <div class="mb-3">
+              <label for="searchUser" class="form-label"
+                >Search by username or email</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="searchUser"
+                name="search_query"
+                placeholder="Enter username or email..."
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-search"></i> Search Users
+            </button>
+          </form>
+
+          {% if search_results %}
+          <hr class="my-4" />
+          <h5>Search Results:</h5>
+          <div class="list-group">
+            {% for user in search_results %}
+            <a
+              href="{{ url_for('chat.createChat', user_id=user.id) }}"
+              class="list-group-item list-group-item-action"
+            >
+              <div class="d-flex align-items-center">
+                <img
+                  src="{{ url_for('route.profile_image', user_id=user.id) }}"
+                  alt="{{ user.username }}"
+                  class="rounded-circle me-3"
+                  style="width: 40px; height: 40px; object-fit: cover"
+                />
+                <div>
+                  <strong>{{ user.username }}</strong>
+                  <p class="mb-0 small text-muted">{{ user.email }}</p>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% elif search_performed %}
+          <div class="alert alert-info mt-3">
+            No users found matching "{{ search_query }}"
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BACKEND ROUTES NEEDED:
+     1. @chat_bp.route('/search-users', methods=['POST'])
+        - Get search_query from form
+        - Query database for matching users (exclude current_user)
+        - Render this template with search_results
+     
+     2. @chat_bp.route('/create-chat/<user_id>')
+        - Create or find existing chat between current_user and user_id
+        - Redirect to the chat page
+-->
+
 {% endblock %}

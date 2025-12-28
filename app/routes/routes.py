@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from flask import Response, request, redirect, url_for, flash
 from model.db import db
+from model.models import User
 
 route = Blueprint("route", __name__, template_folder="templates")
 
@@ -41,8 +42,16 @@ def upload_profile_image():
     return redirect(url_for('route.settings'))
 
 @route.route("/profile/image", methods=['POST', 'GET'])
+@route.route("/profile/image/<int:user_id>", methods=['POST', 'GET'])
 @login_required
-def profile_image():
+def profile_image(user_id=None):
+    if user_id:
+        user = User.query.get(user_id)
+        print(user)
+        if not user or not user.profile_image:
+            return "", 404
+        return Response(user.profile_image, mimetype="image/jpeg")
+    
     if not current_user.profile_image:
         return "", 404
     
