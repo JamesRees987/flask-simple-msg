@@ -14,6 +14,13 @@ def home():
 @route.route('/settings')
 @login_required
 def settings():
+    # TO ADD:
+    # Setup default page to load to
+    # Change password
+    # Chnage username
+    # Set up description e.c.t other social features
+    # Link to website e.g. github, linkedin
+    # Delete account
     return render_template('settings.html')
 
 @route.route('/upload-profile-image', methods=['POST', 'GET'])

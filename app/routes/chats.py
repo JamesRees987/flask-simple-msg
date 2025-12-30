@@ -121,7 +121,60 @@ def viewChat(chat_id):
     other_user = other_user_record.user if other_user_record else None
     
     # messages = Message.query.filter_by(chat_id=chat_id).order_by(Message.timestamp).all()
+    # send setting changes messages
     
     return render_template("chats/chatView.html", 
                          chat=chat_obj, 
                          other_user=other_user)
+
+@chat.route("/chat/<int:chat_id>/settings")
+@login_required
+def chatSettings(chat_id):
+    chat_obj = Chat.query.get_or_404(chat_id)
+
+    return render_template("chats/chatSettings.html", chat=chat_obj)  
+
+@chat.route('/upload-chat-image/<int:chat_id>', methods=['POST', 'GET'])
+@login_required
+def upload_chat_image(chat_id):
+    if 'chat_image' not in request.files:
+        flash('No file selected', 'danger')
+        return redirect(url_for('chat.chatSettings', chat_id=chat_id))
+    
+    file = request.files['chat_image']
+    
+    if file.filename == '':
+        flash('No file selected', 'danger')
+        return redirect(url_for('chat.chatSettings', chat_id=chat_id))
+    
+    image_data = file.read()
+    
+    if len(image_data) > 5 * 1024 * 1024:
+        flash('File size exceeds 5MB limit', 'danger')
+        return redirect(url_for('chat.chatSettings', chat_id=chat_id))
+    
+    chat_obj = Chat.query.get_or_404(chat_id)
+    chat_obj.chat_image = image_data
+    db.session.commit()
+    
+    flash('Chat updated successfully!', 'success')
+    return redirect(url_for('chat.chatSettings', chat_id=chat_id))
+
+# Add send message to chat route
+@chat.route("/chat/<int:chat_id>/update-details", methods=["POST"])
+@login_required
+def update_chat_details(chat_id):
+    chat_obj = Chat.query.get_or_404(chat_id)
+    
+    new_name = request.form.get("chat_name", "")
+    new_description = request.form.get("chat_description", "")
+    
+    if new_name:
+        chat_obj.chat_name = new_name
+    if new_description:
+        chat_obj.chat_description = new_description
+    
+    db.session.commit()
+    
+    flash("Chat details updated successfully!", "success")
+    return redirect(url_for('chat.chatSettings', chat_id=chat_id))

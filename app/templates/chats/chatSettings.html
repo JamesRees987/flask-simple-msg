@@ -1,0 +1,131 @@
+{% extends "base.html" %} {% block title %}Chat Settings - Simple Message App{%
+endblock %} {% block content %}
+<div class="container mt-4">
+  <div class="d-flex align-items-center mb-4">
+    <a
+      href="{{ url_for('chat.viewChat', chat_id=chat.id) }}"
+      class="btn btn-outline-secondary btn-sm me-3"
+    >
+      <i class="bi bi-arrow-left"></i> Back to Chat
+    </a>
+    <h1 class="mb-0">Chat Settings</h1>
+  </div>
+
+  <p class="lead">Setup your chat settings here.</p>
+
+  <!-- Chat Details Section (Name & Description) -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        <i class="bi bi-chat-text me-2"></i>Chat Details
+      </h2>
+      <form
+        action="{{ url_for('chat.update_chat_details', chat_id=chat.id) }}"
+        method="POST"
+      >
+        <!-- Chat Name -->
+        <div class="mb-3">
+          <label for="chatName" class="form-label">Chat Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="chatName"
+            name="chat_name"
+            value="{{ chat.chat_name }}"
+            placeholder="Enter chat name..."
+            required
+            maxlength="150"
+          />
+          <div class="form-text">
+            <i class="bi bi-info-circle"></i> Give your chat a memorable name
+            (max 150 characters).
+          </div>
+        </div>
+
+        <!-- Chat Description -->
+        <div class="mb-3">
+          <label for="chatDescription" class="form-label"
+            >Chat Description</label
+          >
+          <textarea
+            class="form-control"
+            id="chatDescription"
+            name="chat_description"
+            rows="4"
+            placeholder="Enter a description for this chat..."
+            maxlength="500"
+          >
+{{ chat.chat_description or '' }}</textarea
+          >
+          <div class="form-text">
+            <i class="bi bi-info-circle"></i> Add an optional description for
+            this chat (max 500 characters).
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle"></i> Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Chat Image Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2 class="card-title h4"><i class="bi bi-image me-2"></i>Chat Image</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <img
+            src="{{ url_for('chat.chat_image', chat_id=chat.id) }}"
+            alt="{{ chat.chat_name }}"
+            class="mb-3 border"
+            style="
+              width: 150px;
+              height: 150px;
+              border-radius: 50%;
+              object-fit: cover;
+            "
+          />
+          <form
+            action="{{ url_for('chat.upload_chat_image', chat_id=chat.id) }}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="mb-3">
+              <label for="chatImage" class="form-label"
+                >Upload New Chat Image</label
+              >
+              <input
+                type="file"
+                class="form-control"
+                id="chatImage"
+                name="chat_image"
+                accept="image/jpeg,image/jpg"
+                required
+              />
+              <div class="form-text">
+                <i class="bi bi-info-circle"></i> Only JPEG images are accepted.
+                Maximum file size: 5MB.
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-upload"></i> Upload Picture
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Settings Section -->
+  <div class="card">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        <i class="bi bi-gear me-2"></i>Other Settings
+      </h2>
+      <p class="text-muted">Additional settings coming soon...</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

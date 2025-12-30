@@ -40,6 +40,7 @@ class Chat(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     chat_name = db.Column(db.String(150), nullable=True)
     chat_image = db.Column(db.LargeBinary, nullable=True)
+    chat_description = db.Column(db.String(500), nullable=True, default="This is a chat.")
     
     # ADD THESE RELATIONSHIPS
     users = db.relationship('UserToChat', back_populates='chat', lazy=True)
