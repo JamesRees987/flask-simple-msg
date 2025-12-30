@@ -1,15 +1,15 @@
 {% extends "base.html" %} {% block title %}My Chats - Simple Message App{%
 endblock %} {% block content %}
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
+<div class="container mt-4">
+  <!-- Search Section -->
+  <div class="row mb-4">
+    <div class="col-12">
       <div class="card">
         <div class="card-body">
           <h3 class="card-title">Start a New Chat</h3>
           <p class="text-muted">Search for a user to start chatting</p>
 
           <!-- Search Form -->
-          <!-- BACKEND: This form submits to a route that searches users in database -->
           <form method="POST" action="{{ url_for('chat.searchUser') }}">
             <div class="mb-3">
               <label for="searchUser" class="form-label"
@@ -34,6 +34,7 @@ endblock %} {% block content %}
           <h5>Search Results:</h5>
           <div class="list-group">
             {% for user in search_results %}
+
             <a
               href="{{ url_for('chat.createChat', user_id=user.id) }}"
               class="list-group-item list-group-item-action"
@@ -62,17 +63,61 @@ endblock %} {% block content %}
       </div>
     </div>
   </div>
+
+  <!-- My Chats Section -->
+  <div class="row">
+    <div class="col-12">
+      <h3 class="mb-3">My Chats</h3>
+
+      {% if chats %}
+      <div class="row">
+        {% for chat_data in chats %}
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <!-- Chat Image -->
+                <img
+                  src="{{ url_for('chat.chat_image', chat_id=chat_data.chat.id) }}"
+                  alt="{{ chat_data.chat.chat_name }}"
+                  class="rounded-circle me-3"
+                  style="width: 50px; height: 50px; object-fit: cover"
+                />
+                <!-- BACKEND: Need route for chat images -->
+
+                <div class="flex-grow-1">
+                  <h5 class="card-title mb-0">
+                    {{ chat_data.chat.chat_name }}
+                  </h5>
+                  {% if chat_data.other_user %}
+                  <small class="text-muted"
+                    >with {{ chat_data.other_user.username }}</small
+                  >
+                  {% endif %}
+                </div>
+              </div>
+
+              <a
+                href="{{ url_for('chat.viewChat', chat_id=chat_data.chat.id) }}"
+                class="btn btn-primary w-100"
+              >
+                <i class="bi bi-chat-dots"></i> Open Chat
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-info text-center">
+        <i class="bi bi-chat-dots display-4"></i>
+        <p class="mt-3 mb-2">You don't have any chats yet</p>
+        <p class="text-muted">
+          Use the search above to start your first conversation!
+        </p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
-
-<!-- BACKEND ROUTES NEEDED:
-     1. @chat_bp.route('/search-users', methods=['POST'])
-        - Get search_query from form
-        - Query database for matching users (exclude current_user)
-        - Render this template with search_results
-     
-     2. @chat_bp.route('/create-chat/<user_id>')
-        - Create or find existing chat between current_user and user_id
-        - Redirect to the chat page
--->
-
 {% endblock %}
