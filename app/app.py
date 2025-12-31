@@ -62,6 +62,10 @@ login_manager.init_app(app)
 login_manager.login_view = app.config["LOGIN_VIEW"]
 login_manager.login_message = app.config["LOGIN_MESSAGE"]
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 # SocketIO setup
 socketio = SocketIO(
     app, cors_allowed_origins=app.config["SOCKETIO_CORS_ALLOWED_ORIGINS"])
