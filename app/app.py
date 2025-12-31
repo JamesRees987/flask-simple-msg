@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from model.models import User
 from flask_socketio import SocketIO
 
+# set PYTHONDONTWRITEBYTECODE=1
 import sys
 sys.dont_write_bytecode = True
 
